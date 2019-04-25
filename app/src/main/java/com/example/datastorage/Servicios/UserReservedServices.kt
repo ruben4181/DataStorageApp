@@ -32,6 +32,10 @@ class UserReservedServices(context: Context) : AppCompatActivity(), IUserService
         return returnValue
     }
 
+    override fun getUser(email: String): User? {
+        return null
+    }
+
     override fun saveUser(user: User)
     {
         val editor = preferencias.edit()

@@ -28,4 +28,8 @@ class SignupServices(context : Context){
         dbConnection.saveUser(this.user)
         return verifyUser(user)
     }
+
+    fun getUser(email : String) : User?{
+        return dbConnection.getUser(email)
+    }
 }

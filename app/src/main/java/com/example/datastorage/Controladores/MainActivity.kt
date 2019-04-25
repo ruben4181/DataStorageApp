@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity()
     {
         val email = findViewById<TextView>(R.id.email);
         val password = findViewById<TextView>(R.id.password);
-        val user = User(null, null, email.text.toString(), null, password.text.toString())
+        val user = User(null, null, email.text.toString(), null, password.text.toString(), null)
 
         if(this.loginServices.verifyUser(user))
         {

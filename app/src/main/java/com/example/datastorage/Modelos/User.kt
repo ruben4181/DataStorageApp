@@ -5,5 +5,6 @@ data class User(
     var name: String?,
     val email: String?,
     val age: Int?,
-    var password: String?
+    var password: String?,
+    var img : String?
     )

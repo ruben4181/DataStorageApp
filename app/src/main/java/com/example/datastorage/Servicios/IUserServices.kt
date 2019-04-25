@@ -7,4 +7,5 @@ interface IUserServices
     fun verifyUser(user: User) : Boolean
     fun saveUser(user: User)
     fun consultUsers() : List<User>?
+    fun getUser(email : String) : User?
 }

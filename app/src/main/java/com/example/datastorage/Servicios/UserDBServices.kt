@@ -14,7 +14,8 @@ class UserDBServices(context: Context) : SQLiteOpenHelper(context, "UserDBServic
                            " name text," +
                            " email text," +
                            " age integer," +
-                           " password text)"
+                           " password text, "+
+                            "img text)"
         db?.execSQL(sql)
     }
 
@@ -50,12 +51,42 @@ class UserDBServices(context: Context) : SQLiteOpenHelper(context, "UserDBServic
         localUser.put("email", user.email)
         localUser.put("age", user.age)
         localUser.put("password", user.password)
+        localUser.put("img", user.img)
         this.executeModification(localUser)
+    }
+
+    fun updateUser(user: User){
+        var localUser = ContentValues()
+        localUser.put("name", user.name)
+        localUser.put("email", user.email)
+        localUser.put("age", user.age)
+        localUser.put("password", user.password)
+        localUser.put("img", user.img)
+        this.executeUpdate(localUser)
+    }
+
+    override fun getUser(email: String): User? {
+        val sql : String = "SELECT idUser, name, email, age, password, img FROM users WHERE email='"+email+"' "
+        val result : Cursor = this.executeQuery(sql, this.writableDatabase)
+        result.moveToFirst()
+        lateinit var user : User
+        while(!result.isAfterLast){
+            user  = User(
+                result.getInt(0),
+                result.getString(1),
+                result.getString(2),
+                result.getInt(3),
+                result.getString(4),
+                result.getString(5)
+            )
+            result.moveToNext()
+        }
+        return user
     }
 
     override fun consultUsers(): List<User>?
     {
-        val sql : String = "SELECT idUser, name, email, age, password FROM users"
+        val sql : String = "SELECT idUser, name, email, age, password, img FROM users"
         val result : Cursor = this.executeQuery(sql, this.writableDatabase)
         var listUsers : MutableList<User>? = ArrayList<User>()
         result.moveToFirst()
@@ -68,7 +99,8 @@ class UserDBServices(context: Context) : SQLiteOpenHelper(context, "UserDBServic
                 result.getString(1),
                 result.getString(2),
                 result.getInt(3),
-                result.getString(4)
+                result.getString(4),
+                result.getString(5)
             )
 
             listUsers?.add(user)
@@ -89,6 +121,12 @@ class UserDBServices(context: Context) : SQLiteOpenHelper(context, "UserDBServic
     {
         val bd = this.writableDatabase
         bd.insert("users", null, user)
+        bd.close()
+    }
+
+    private fun executeUpdate(values : ContentValues){
+        val bd = this.writableDatabase
+        bd.update("users", values, "email=?", arrayOf(values.getAsString("email")))
         bd.close()
     }
 }
